@@ -137,3 +137,42 @@ try{
 - join(long millis, int nanos) – fine‑grained timeout.
 
 **How it wokrs internally:** When you call `join()` on a thread, the current thread waits on that thread's monitor (the thread object itself) until the target thread terminates. Termination triggers a notifyALl() on the thread object, waking the waiting thread. (This is why you should not use wait/notify on Thread instances yourself - it could interfere.) 
+
+
+### Putting It All Together: A Simple Example
+Let's create a  programe that uses two threads to print odd and even numbers up to 10, and enusres the main thread waits for both.
+
+```java
+public class OddEvenPrinter {
+    public static void main(String[] args) {
+        Runnable oddTask = () -> {
+            for(int i =1; i <= 10; i+= 2) {
+                sout("ODD: "+ 1);
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e ) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    }
+}
+
+Runnable evenTask = () -> {
+    for(int i = 2 i <=10; i+=2) {
+        sout("Even: " + i);
+        try {
+            Thread.sleep(100);
+        } catch(InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+Thread t1 = new Thread(oddTask, "OddThreade");
+Thread t2 = new Thread(evenTask, "EvenThread");
+
+t1.start();
+t2.start();
+```
